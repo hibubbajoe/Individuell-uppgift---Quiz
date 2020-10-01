@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function (e) {
 
     //functions
+}
     function startQuiz() {
         // store HTML outputs
         let output = [];
@@ -66,99 +67,128 @@ document.addEventListener("DOMContentLoaded", function (e) {
         resultsContainer.innerHTML = `${numCorrect} out of ${questions.length}`;
 
     };
-    function showSlide(n) {
-        slides[currentSlide].classList.remove('active-slide');
-        slides[n].classList.add('active-slide');
-        currentSlide = n;
-        if (currentSlide === 0) {
-            previousButton.style.display = 'none';
-        }
-        else {
-            previousButton.style.display = 'inline-block';
-        }
-        if (currentSlide === slides.length - 1) {
-            nextButton.style.display = 'none';
-            submitButton.style.display = 'inline-block';
-        }
-        else {
-            nextButton.style.display = 'inline-block';
-            submitButton.style.display = 'none';
-        }
-        if (currentSlide === 3) {
-            previousButton.style.display = 'none';
-            submitButton.style.display = 'none';
-        }
+function showSlide(n) {
+    slides[currentSlide].classList.remove('active-slide');
+    slides[n].classList.add('active-slide');
+    currentSlide = n;
+    if (currentSlide === 0) {
+        previousButton.style.display = 'none';
     }
-    function nextSlide() {
-        showSlide(currentSlide + 1);
-        console.log(currentSlide)
+    else {
+        previousButton.style.display = 'inline-block';
     }
-    function previousSlide() {
-        showSlide(currentSlide - 1);
-        console.log(currentSlide)
+    if (currentSlide === slides.length - 1) {
+        nextButton.style.display = 'none';
+        submitButton.style.display = 'inline-block';
+    }
+    else {
+        nextButton.style.display = 'inline-block';
+        submitButton.style.display = 'none';
     }
 
-    //variables
-    let quizContainer = document.getElementById('quiz')
-    let resultsContainer = document.getElementById('results')
-    let submitButton = document.getElementById('submit')
+}
+function nextSlide() {
+    showSlide(currentSlide + 1);
+    console.log(currentSlide)
+}
+function previousSlide() {
+    showSlide(currentSlide - 1);
+    console.log(currentSlide)
+}
+function endSlide() {
+    console.log("tjäna")
+    slides[currentSlide].classList.remove('active-slide');
+    previousButton.style.display = 'none';
+    submitButton.style.display = 'none';
 
-    let questions = [
-        {
-            question: "What is my name?",
-            answers: {
-                a: "Robin",
-                b: "Not Robin",
-                c: "Not Robin"
-            },
-            correctAnswer: "a",
+    let playAgainBtn = document.createElement('button');
+    playAgainBtn.setAttribute("id", "playAgainBtn")
+    playAgainBtn.innerHTML = "Do you want to play Again?";
+
+    let buttonDiv = document.getElementById("buttons");
+    buttonDiv.appendChild(playAgainBtn);
+
+}
+function resetGame() {
+    location.reload();
+}
+
+
+//variables
+let quizContainer = document.getElementById('quiz')
+let resultsContainer = document.getElementById('results')
+let submitButton = document.getElementById('submit')
+let playAgainBtn = document.getElementById("playAgainBtn")
+
+
+//questions that we later will get from Postman
+let questions = [
+    {
+        question: "What is my name?",
+        answers: {
+            a: "Robin",
+            b: "Not Robin",
+            c: "Not Robin"
         },
-        {
-            question: "How old am I?",
-            answers: {
-                a: "Not 30",
-                b: "30",
-                c: "Deffo not 30"
-            },
-            correctAnswer: "b"
+        correctAnswer: "a",
+    },
+    {
+        question: "How old am I?",
+        answers: {
+            a: "Not 30",
+            b: "30",
+            c: "Deffo not 30"
         },
-        {
-            question: "Do you like music?",
-            answers: {
-                a: "Hell yes",
-                b: "Hell no",
-                c: "Hellest to no's",
-                d: "Dafuq"
-            },
-            correctAnswer: "a"
-        }
-    ];
+        correctAnswer: "b"
+    },
+    {
+        question: "Do you like music?",
+        answers: {
+            a: "Hell yes",
+            b: "Hell no",
+            c: "Hellest to no's",
+            d: "Dafuq"
+        },
+        correctAnswer: "a"
+    }
+];
 
 
-    //callouts
-    startQuiz()
+//callouts
 
-    //varibales for slides
-    let previousButton = document.getElementById("previous");
-    let nextButton = document.getElementById("next");
-    let slides = document.querySelectorAll(".slide");
-    let currentSlide = 0;
 
-    //start on the first slide
-    showSlide(currentSlide);
 
-    //event listeners
-    previousButton.addEventListener("click", function (e) {
-        previousSlide();
+startQuiz()
 
-    })
-    nextButton.addEventListener("click", function (e) {
-        nextSlide();
 
-    });
-    submitButton.addEventListener("click", function (e) {
-        printResults();
-    });
+
+//varibales for slides
+let previousButton = document.getElementById("previous");
+let nextButton = document.getElementById("next");
+let slides = document.querySelectorAll(".slide");
+let currentSlide = 0;
+
+//start on the first slide
+showSlide(currentSlide);
+
+//event listeners
+previousButton.addEventListener("click", function (e) {
+    previousSlide();
+
+})
+nextButton.addEventListener("click", function (e) {
+    nextSlide();
+
+});
+submitButton.addEventListener("click", function (e) {
+    endSlide();
+    printResults();
+});
+
+playAgainBtn.addEventListener("click", function (e) {
+    console.log("im working")
+    resetGame();
+});
 
 
 
