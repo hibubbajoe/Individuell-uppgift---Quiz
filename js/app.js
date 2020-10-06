@@ -1,55 +1,7 @@
 
-function printQuiz(questions) {
-
-    // store HTML outputs
-    let output = [];
-
-    let quizContainer = document.getElementById('quiz')
-
-
-    //foreach question
-    questions.forEach(
-        (currentQuestion, questionNumber) => {
-            // store answers
-            let answers = [];
-
-            //foreach answer
-            for (letter in currentQuestion.answers) {
-
-
-                //console.log(letter)
-                //console.log(currentQuestion.answers)
-
-
-                // adding checkboxes
-                if (currentQuestion.answers[letter] !== null) {
-                    answers.push(
-                        `<label>
-                                <input type="checkbox" name="question${questionNumber}" value="${letter}">
-                                ${currentQuestion.answers[letter]}
-                            </label>`
-                    );
-                }
-            }
-
-            // adding the question and answers to output
-            output.push(
-                `<div class="slide">
-                        <div class="question"> ${currentQuestion.question} </div>
-                        <div class="answers"> ${answers.join('')} </div>
-                        <p>${questionNumber + 1}/${questions.length}
-                        </div>`
-            );
-
-        }
-        // printing out the output on the page
-    );
-    quizContainer.innerHTML = output.join('');
-
-}
 
 //functions
-function printResults(questions) {
+/*function printResults(questions) {
 
     console.log(questions)
 
@@ -77,12 +29,12 @@ function printResults(questions) {
         for (let corrAnswer in question.correct_answers) {
             if (question.correct_answers[corrAnswer] == 'true') {
                 correctAnswer = corrAnswer.replace('_correct', ''); // correctAnswers.push(correctAnswer);
-                //console.log("Correct answer for question ", i + 1, " is ", correctAnswer);
+
             }
             // TODO: handle case of multiple correct answers 
         }
 
-        // console.log("correctAnswer: ", correctAnswer);
+
         //finding selected answers
         let answerContainer = answerContainers[i];
         let selector = `input[name=question${i}]:checked`;
@@ -94,40 +46,60 @@ function printResults(questions) {
             console.log('Your answer for question ', i + 1, ' is correct!');
         }
 
-
     });
     resultsContainer.innerHTML = `${numCorrect} out of ${questions.length}`;
     // console.log("Correct answers: ", correctAnswers);
     console.log("You got a total of ", numCorrect, " correct answers!");
 
-};
+    console.log("EAT PUSSY YOU STINKER!!!");
+};*/
+
+
 
 
 document.addEventListener("DOMContentLoaded", function (e) {
 
-    async function catchQuestions() {
-        let response = await fetch('https://quizapi.io/api/v1/questions?apiKey=uaTodJdS5vQRU3kBesYWkWw2XO7m3S8IUSYaPfdr&limit=10')
-        let questions = await response.json();
-        //console.log(questions)
-        return questions;
-    }
 
-    catchQuestions().then(questions => {
-        printQuiz(questions);
+    //variables
+    let submitButton = document.getElementById('submit')
+    let playAgainBtn = document.getElementById("playAgainBtn")
+    let slides = document.querySelectorAll(".slide");
+    let previousButton = document.getElementById("previous");
+    let nextButton = document.getElementById("next");
+    // showSlide(currentSlide)
+    //event listeners
+    previousButton.addEventListener("click", function (e) {
+        previousSlide();
+        console.log('Fan tja')
+    })
+    nextButton.addEventListener("click", function (e) {
+        nextSlide();
+        console.log('Fan tja')
     });
 
 
+    async function buildQuiz() {
+        let response = await fetch('https://quizapi.io/api/v1/questions?apiKey=uaTodJdS5vQRU3kBesYWkWw2XO7m3S8IUSYaPfdr&limit=10')
+        let questions = await response.json();
+        return questions;
+    }
 
-    /* fetch('https://quizapi.io/api/v1/questions?apiKey=uaTodJdS5vQRU3kBesYWkWw2XO7m3S8IUSYaPfdr&limit=10')
-         .then(response => response.json())
-         .then(data => {
-             let questions = new Quiz(data);
-             printQuiz(questions.print());
-         })*/
+    buildQuiz().then(questions => {
+
+        let quiz = new Quiz(questions);
+
+        quiz.printQuiz();
+
+        submitButton.addEventListener("click", function (e) {
+            quiz.printResults();
+            // endSlide();
+        });
+
+    })
+
+
 
     /* function showSlide(n) {
- 
- 
  
          let currentSlide = n;
  
@@ -171,49 +143,9 @@ document.addEventListener("DOMContentLoaded", function (e) {
          let buttonDiv = document.getElementById("buttons");
          buttonDiv.appendChild(playAgainBtn);
          
+        }
          playAgainBtn.addEventListener("click", resetGame)
-     }*/
-    function resetGame() {
-        location.reload();
-    }
-
-
-
-
-
-    //variables
-    let submitButton = document.getElementById('submit')
-    let playAgainBtn = document.getElementById("playAgainBtn")
-    let slides = document.querySelectorAll(".slide");
-    let previousButton = document.getElementById("previous");
-    let nextButton = document.getElementById("next");
-
-
-    // showSlide(currentSlide)
-
-
-
-
-
-    //event listeners
-    previousButton.addEventListener("click", function (e) {
-        previousSlide();
-        console.log('Fan tja')
-
-    })
-    nextButton.addEventListener("click", function (e) {
-        nextSlide();
-        console.log('Fan tja')
-
-    });
-    submitButton.addEventListener("click", function (e) {
-        catchQuestions().then(questions => {
-            printResults(questions);
-        });
-
-        // endSlide();
-    });
+         function resetGame() {
+             location.reload();
+    }*/
 });
-
-
-
