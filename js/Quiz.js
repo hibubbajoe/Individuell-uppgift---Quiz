@@ -1,3 +1,4 @@
+//class with attributes of question 
 class Question {
     constructor(question) {
         this.question = question.question;
@@ -7,6 +8,7 @@ class Question {
     }
 }
 
+//class with questions and print methods
 class Quiz {
     constructor(questions) {
         this.questions = [];
@@ -17,38 +19,36 @@ class Quiz {
     }
     printQuiz() {
 
-        // store HTML outputs
+        //store HTML outputs
         let output = [];
 
+        //quiz div 
         let quizContainer = document.getElementById('quiz')
 
-        console.log(this.questions)
-
-
-        //foreach question in questions
+        //going through every question 
         this.questions.forEach(
             (question, index) => {
 
-                // storing answers
+                //array to store answers
                 let answers = [];
 
-                //foreach answer
+                //going through every answer
                 for (let answer in question.answers) {
 
-                    //not printing an empty answer
+                    //not printing if answer is empty
                     if (question.answers[answer] !== null) {
 
-                        //adding checkboxes
+                        //pushing HTML for answer to answers array 
                         answers.push(
                             `<label>
                                 <input type="checkbox" name="question${index}" value="${answer}" id="box">
-                                ${question.answers[answer]}
+                                ${question.answers[answer]} 
                             </label>`
                         );
                     }
                 }
 
-                // adding the question and answers to output
+                //pushing HTML for question and answers to output array
                 output.push(
                     `<div class="slide">
                         <div class="question"> ${question.question} </div>
@@ -57,78 +57,78 @@ class Quiz {
                     </div>`
                 );
             }
-            // printing out the output on the page
         );
+
+        //printing the output array with question and answers to webpage
         quizContainer.innerHTML = output.join('');
+
+        //call to load the layout with slides 
+        loadLayout();
 
     }
 
     printResults() {
 
-
-        //to get to the HTML
+        //quiz div
         let quizContainer = document.getElementById('quiz')
-
-        //to get to the HTML
+        //results div
         let resultsContainer = document.getElementById('results')
-
-        //to cover all answers
+        //answers div
         let answerContainers = quizContainer.querySelectorAll('.answers');
 
+        //arrays to store answers
         let correctAnswers = [];
-
         let userAnswers = [];
 
+        //starting of with 0 points
         let numCorrect = 0;
 
-        //foreach question
-
+        //goting through every question
         this.questions.forEach(
             (question, index) => {
 
-                //console.log(question.correct_answers)
-
-                let correctAnswer;
-
-                //temporary arrays to hold correct and user answers
+                //temporary arrays to hold correct answers and user answers
                 let tempCorrectAnswer = [];
                 let tempUserAnswer = [];
 
-
-                // go through answers in the correct answer object
+                //going through every answer
                 for (let answer in question.correct_answers) {
-                    //catching and pushing answers returning TRUE 
+                    //catching answers returning 'true'
                     if (question.correct_answers[answer] == 'true') {
-                        correctAnswer = answer.replace('_correct', ''); // answer_a_correct becomes answer_a to easier check with userAnswer
-                        //pushing any number of correct answers to that questions index
+                        //answer_a_correct becomes answer_a
+                        let correctAnswer = answer.replace('_correct', '');
+                        //pushing correct answers
                         tempCorrectAnswer.push(correctAnswer);
                     }
                 }
 
+                //goting throigh every answer
                 for (let answer in question.answers) {
 
-                    //variables to determine what checkboxes 
+                    //looking at container for every answer
                     let answerContainer = answerContainers[index];
+                    //returning answer_x if checked or undefined 
                     let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
 
-                    //as long the an answer has a value it's pushed
+                    //user answer is pushed as long as it's not undefined
                     if (userAnswer !== undefined) {
                         tempUserAnswer.push(userAnswer);
                     }
                 }
 
-                //pushing the answers to their respective array
-                correctAnswers.push(tempCorrectAnswer);
-                userAnswers.push(tempUserAnswer);
-
-                //comparing the two arrays to see what indexes are the same 
-                if (JSON.stringify(correctAnswers[index]) === JSON.stringify(userAnswers[index])) {
+                //checking if answer is correct
+                if (JSON.stringify(tempCorrectAnswer) === JSON.stringify(tempUserAnswer)) {
                     numCorrect++;
                 }
+
+                //pushing answers to their respective array
+                correctAnswers.push(tempCorrectAnswer);
+                userAnswers.push(tempUserAnswer);
             });
 
-        console.log(correctAnswers)
-        console.log(userAnswers)
+
+        endSlide();
+        //printing results to webpage
         resultsContainer.innerHTML = `You have ${numCorrect} points out of ${this.questions.length}`;
     };
 }
