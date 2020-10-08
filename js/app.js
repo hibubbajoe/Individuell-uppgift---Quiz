@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function (e) {
 
+
     //fetching quiz from quizapi
     async function buildQuiz() {
-        let response = await fetch('https://quizapi.io/api/v1/questions?apiKey=uaTodJdS5vQRU3kBesYWkWw2XO7m3S8IUSYaPfdr&limit=10')
+        let response = await fetch('https://quizapi.io/api/v1/questions?apiKey=uaTodJdS5vQRU3kBesYWkWw2XO7m3S8IUSYaPfdr&limit=10');
         let questions = await response.json();
         return questions;
     }
@@ -20,4 +21,5 @@ document.addEventListener("DOMContentLoaded", function (e) {
             quiz.printResults();
         });
     })
+
 });

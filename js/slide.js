@@ -7,6 +7,14 @@ let slides;
 let currentSlide;
 
 
+
+function preSlide() {
+    previousButton.style.display = 'none';
+    submitButton.style.display = 'none';
+    nextButton.style.display = 'none';
+}
+
+
 function loadLayout() {
 
     //getting all elements from HTML
@@ -19,7 +27,8 @@ function loadLayout() {
     currentSlide = 0;
 
     //calling the first slide
-    showSlide(currentSlide);
+    preSlide()
+    //showSlide(currentSlide);
 
     //event listeners
     previousButton.addEventListener("click", function (e) {
@@ -29,7 +38,6 @@ function loadLayout() {
         nextSlide();
     });
 }
-
 
 function showSlide(n) {
 
@@ -42,15 +50,15 @@ function showSlide(n) {
     currentSlide = n;
 
     //showing and hiding buttons depending on what question you're on
-    if (currentSlide === 0) {
-        previousButton.style.display = 'none';
+    if (currentSlide === 0) { //first question
+        previousButton.style.display = 'none'; //previous button is NOT displayed
     }
     else {
         previousButton.style.display = 'inline-block';
     }
-    if (currentSlide === slides.length - 1) {
-        nextButton.style.display = 'none';
-        submitButton.style.display = 'inline-block';
+    if (currentSlide === slides.length - 1) { //last question   
+        nextButton.style.display = 'none'; //next button is NOT displayed
+        submitButton.style.display = 'inline-block'; //submit button IS displayed
     }
     else {
         nextButton.style.display = 'inline-block';
@@ -82,9 +90,9 @@ function endSlide() {
     let buttonDiv = document.getElementById("buttons");
     buttonDiv.appendChild(playAgainBtn);
 
-
+    //button to reload page
     playAgainBtn.addEventListener("click", function (e) {
-        console.log("tjäna")
+        location.reload();
     })
 }
 

@@ -17,6 +17,7 @@ class Quiz {
             this.questions.push(new Question(question));
         }
     }
+
     printQuiz() {
 
         //store HTML outputs
@@ -24,6 +25,8 @@ class Quiz {
 
         //quiz div 
         let quizContainer = document.getElementById('quiz')
+
+        console.log(this.questions)
 
         //going through every question 
         this.questions.forEach(
@@ -62,9 +65,8 @@ class Quiz {
         //printing the output array with question and answers to webpage
         quizContainer.innerHTML = output.join('');
 
-        //call to load the layout with slides 
+        //call to load the layout with slides from slide.js
         loadLayout();
-
     }
 
     printResults() {
@@ -91,6 +93,8 @@ class Quiz {
                 let tempCorrectAnswer = [];
                 let tempUserAnswer = [];
 
+
+
                 //going through every answer
                 for (let answer in question.correct_answers) {
                     //catching answers returning 'true'
@@ -102,14 +106,15 @@ class Quiz {
                     }
                 }
 
-                //goting throigh every answer
+                //going throigh every answer
                 for (let answer in question.answers) {
 
                     //looking at container for every answer
                     let answerContainer = answerContainers[index];
                     //returning answer_x if checked or undefined 
-                    let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
 
+
+                    let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
                     //user answer is pushed as long as it's not undefined
                     if (userAnswer !== undefined) {
                         tempUserAnswer.push(userAnswer);
@@ -126,9 +131,10 @@ class Quiz {
                 userAnswers.push(tempUserAnswer);
             });
 
-
+        //calling the last slide from slide.js
         endSlide();
+
         //printing results to webpage
-        resultsContainer.innerHTML = `You have ${numCorrect} points out of ${this.questions.length}`;
+        resultsContainer.innerHTML = `You got ${numCorrect} points out of ${this.questions.length}`;
     };
 }
