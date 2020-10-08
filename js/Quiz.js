@@ -112,8 +112,6 @@ class Quiz {
                     //looking at container for every answer
                     let answerContainer = answerContainers[index];
                     //returning answer_x if checked or undefined 
-
-
                     let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
                     //user answer is pushed as long as it's not undefined
                     if (userAnswer !== undefined) {

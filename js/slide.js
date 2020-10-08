@@ -5,16 +5,8 @@ let previousButton;
 let nextButton;
 let slides;
 let currentSlide;
-
-
-
-function preSlide() {
-    previousButton.style.display = 'none';
-    submitButton.style.display = 'none';
-    nextButton.style.display = 'none';
-}
-
-
+let playerOne;
+//the quiz is printed but hidden until player has pressed start
 function loadLayout() {
 
     //getting all elements from HTML
@@ -26,7 +18,7 @@ function loadLayout() {
 
     currentSlide = 0;
 
-    //calling the first slide
+    //preSlide is what keeps everything hidden
     preSlide()
     //showSlide(currentSlide);
 
@@ -39,7 +31,22 @@ function loadLayout() {
     });
 }
 
+function preSlide() {
+
+    //shows us our first question and creates player
+    document.getElementById('start').addEventListener('click', function () {
+        this.style.display = 'none';
+        let player = document.getElementById("player");
+        playerOne = player.value;
+        showSlide(currentSlide);
+    })
+}
+
+
 function showSlide(n) {
+
+    //removing the input textbox
+    player.style.display = 'none';
 
     //removing active-slide to hide previous question
     slides[currentSlide].classList.remove('active-slide');
