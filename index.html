@@ -15,30 +15,33 @@
 </div>
 
 <body id="body">
-    <div id=quiz-background">
 
-        <div class="player">
-            <input type="text" id="player" placeholder="What's your name?">
 
-        </div>
+    <div id="player_details">
+        <p>What's your name?</p>
+        <input type="text" id="player" placeholder="Player"> <br>
+        <p>How many questions do you want to answer?</p>
+        <input type="number" id="question_amount" min="5" max="10" placeholder="5-10">
+    </div>
 
-        <div class="quiz-container">
-            <div id="quiz"></div>
-        </div>
-        <div id="results"></div>
 
-        <div id="buttons">
-            <button id="previous" class="hidden">Go back</button>
-            <button id="next" class="hidden">Next Question</button>
-            <button id="submit" class="hidden">Submit Quiz</button>
-            <button id="start">Start Quiz</button>
-        </div>
 
-        <script src="js/app.js"></script>
-        <script src="js/Quiz.js"></script>
-        <script src="js/player.js"></script>
+    <div class="quiz-container">
+        <div id="quiz"></div>
+    </div>
 
-        <!-- <script src="js/slide.js"></script> -->
+    <div id="results"></div>
+
+    <div id="buttons">
+        <button id="previous" class="hidden">Go back</button>
+        <button id="next" class="hidden">Next Question</button>
+        <button id="submit" class="hidden">Submit Quiz</button>
+        <button id="start">Start Quiz</button>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/Quiz.js"></script>
+    <script src="js/player.js"></script>
     </div>
 </body>
 

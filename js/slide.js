@@ -6,6 +6,7 @@ let nextButton;
 let slides;
 let currentSlide;
 let playerOne;
+
 //the quiz is printed but hidden until player has pressed start
 function loadLayout() {
 
@@ -18,9 +19,8 @@ function loadLayout() {
 
     currentSlide = 0;
 
-    //preSlide is what keeps everything hidden
-    preSlide()
-    //showSlide(currentSlide);
+    //starts slides
+    showSlide(currentSlide);
 
     //event listeners
     previousButton.addEventListener("click", function (e) {
@@ -30,24 +30,12 @@ function loadLayout() {
         nextSlide();
     });
 }
-
-function preSlide() {
-
-    //shows us our first question and creates player
-    document.getElementById('start').addEventListener('click', function () {
-        this.style.display = 'none';
-        let player = document.getElementById("player");
-        playerOne = player.value;
-        showSlide(currentSlide);
-    })
-}
-
-
+//hiding and showing buttons / going between slides
 function showSlide(n) {
 
-    //removing the input textbox
-    player.style.display = 'none';
-
+    //removing the the input html
+    player_details.style.display = 'none';
+    start.style.display = 'none';
     //removing active-slide to hide previous question
     slides[currentSlide].classList.remove('active-slide');
     //adding active-slide to show next question
@@ -72,7 +60,6 @@ function showSlide(n) {
         submitButton.style.display = 'none';
     }
 }
-
 //functions to go back and forth between questions
 function nextSlide() {
     showSlide(currentSlide + 1);
@@ -81,8 +68,7 @@ function previousSlide() {
     showSlide(currentSlide - 1);
 
 }
-
-//function to let player play again
+//goes to endslide with options to play again
 function endSlide() {
 
     //hiding questions and buttons
@@ -102,5 +88,3 @@ function endSlide() {
         location.reload();
     })
 }
-
-

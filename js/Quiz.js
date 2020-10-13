@@ -13,6 +13,7 @@ class Quiz {
     constructor(questions) {
         this.questions = [];
 
+        //pushing every question into questions array
         for (let question of questions) {
             this.questions.push(new Question(question));
         }
@@ -22,11 +23,8 @@ class Quiz {
 
         //store HTML outputs
         let output = [];
-
         //quiz div 
         let quizContainer = document.getElementById('quiz')
-
-        console.log(this.questions)
 
         //going through every question 
         this.questions.forEach(
@@ -40,14 +38,12 @@ class Quiz {
 
                     //not printing if answer is empty
                     if (question.answers[answer] !== null) {
-
                         //pushing HTML for answer to answers array 
                         answers.push(
                             `<label>
-                                <input type="checkbox" name="question${index}" value="${answer}" id="box">
-                                ${question.answers[answer]} 
-                            </label>`
-                        );
+                                    <input type="checkbox" name="question${index}" value="${answer}" id="box">
+                                    ${question.answers[answer]}
+                            </label>`);
                     }
                 }
 
@@ -62,38 +58,55 @@ class Quiz {
             }
         );
 
-        //printing the output array with question and answers to webpage
+        //prints the output array with question and answers to page
         quizContainer.innerHTML = output.join('');
 
         //call to load the layout with slides from slide.js
         loadLayout();
     }
 
-    printResults() {
+    catchUserAnswers() {
 
         //quiz div
         let quizContainer = document.getElementById('quiz')
-        //results div
-        let resultsContainer = document.getElementById('results')
         //answers div
         let answerContainers = quizContainer.querySelectorAll('.answers');
-
-        //arrays to store answers
-        let correctAnswers = [];
+        //array to store all correct answers    
         let userAnswers = [];
 
-        //starting of with 0 points
-        let numCorrect = 0;
-
-        //goting through every question
+        //going through every question
         this.questions.forEach(
             (question, index) => {
 
-                //temporary arrays to hold correct answers and user answers
-                let tempCorrectAnswer = [];
+                //temporary array to hold multiple user answers
                 let tempUserAnswer = [];
 
+                for (let answer in question.answers) {
+                    //looking at container for every answer
+                    let answerContainer = answerContainers[index];
+                    //returning answer_x if checked or undefined if not checked
+                    let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
+                    //user answer is pushed as long as it's not undefined
+                    if (userAnswer !== undefined) {
+                        tempUserAnswer.push(userAnswer);
+                    }
+                }//pushing user answers to main array
+                userAnswers.push(tempUserAnswer);
+            })
+        return userAnswers;
+    }
 
+    catchCorrectAnswers() {
+
+        //array to store all correct answers
+        let correctAnswers = [];
+
+        //going through every question
+        this.questions.forEach(
+            (question) => {
+
+                //temporary array to hold multiple correct answers
+                let tempCorrectAnswer = [];
 
                 //going through every answer
                 for (let answer in question.correct_answers) {
@@ -101,38 +114,49 @@ class Quiz {
                     if (question.correct_answers[answer] == 'true') {
                         //answer_a_correct becomes answer_a
                         let correctAnswer = answer.replace('_correct', '');
-                        //pushing correct answers
+                        //pushing correct answers to temp array
                         tempCorrectAnswer.push(correctAnswer);
                     }
-                }
-
-                //going throigh every answer
-                for (let answer in question.answers) {
-
-                    //looking at container for every answer
-                    let answerContainer = answerContainers[index];
-                    //returning answer_x if checked or undefined 
-                    let userAnswer = (answerContainer.querySelector(`input[value=${answer}]:checked`) || {}).value;
-                    //user answer is pushed as long as it's not undefined
-                    if (userAnswer !== undefined) {
-                        tempUserAnswer.push(userAnswer);
-                    }
-                }
-
-                //checking if answer is correct
-                if (JSON.stringify(tempCorrectAnswer) === JSON.stringify(tempUserAnswer)) {
-                    numCorrect++;
-                }
-
-                //pushing answers to their respective array
+                }//pushing correct answers to main array
                 correctAnswers.push(tempCorrectAnswer);
-                userAnswers.push(tempUserAnswer);
-            });
+            })
+        return correctAnswers;
+    }
 
-        //calling the last slide from slide.js
+    calculatePoints() {
+
+        //arrays to store answers
+        let correctAnswers = this.catchCorrectAnswers();
+        let userAnswers = this.catchUserAnswers();
+        let playerPoints = [];
+
+        //comparing the two arrays
+        for (let i = 0; i < this.questions.length; i++) {
+            //if both arrays are the same player gets a point
+            if (JSON.stringify(correctAnswers[i]) == JSON.stringify(userAnswers[i])) {
+
+                //adds point to player class
+                currentPlayer.points++;
+
+                //this one is just for the reduce function
+                playerPoints.push(1);
+            }
+        }
+        //just wanna show off the reduce function
+        console.log(`The player got a total of ${playerPoints.reduce((acc, curr) => {
+            return acc + curr;
+        }, 0)} points`);
+    }
+
+    printResults() {
+        //results div
+        let resultsContainer = document.getElementById('results');
+
+        //calling functions to calculate points and show last slide
+        this.calculatePoints();
         endSlide();
 
-        //printing results to webpage
-        resultsContainer.innerHTML = `You got ${numCorrect} points out of ${this.questions.length}`;
+        //prints results to page
+        resultsContainer.innerHTML = `${currentPlayer.name} you got ${currentPlayer.points} out of ${this.questions.length} points`;
     };
 }
